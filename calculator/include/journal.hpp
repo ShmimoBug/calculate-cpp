@@ -1,5 +1,5 @@
-#ifndef JOURNAL
-#define JOURNAL
+#ifndef JOURNAL_H
+#define JOURNAL_H
 
 #include <sstream>
 #include <vector>
@@ -16,4 +16,4 @@ private:
     std::stringstream m_total;
 };
 
-#endif // JOUNRAL
+#endif // JOUNRAL_H

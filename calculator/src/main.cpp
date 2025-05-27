@@ -3,23 +3,42 @@
 #include "journal.hpp"
 #include "postfix_eval.hpp"
 #include "tokenizer.hpp"
-
-std::string trim(const std::string& str) {
-    const auto str_begin = str.find_first_not_of(" \t");
-    if (str_begin == std::string::npos) {
-        return ""; // no content
-    }
-
-    const auto str_end = str.find_last_not_of(" \t");
-    const auto str_range = str_end-str_begin+1;
-    return str.substr(str_begin, str_range);
-}
+#include "str_util.hpp"
 
 void print_options() {
     std::cout << "=== C++ Calculator ===\n";
     std::cout << " [e]xit\n";
     std::cout << " [l]ist - List out previous expression and result\n";
     std::cout << " [t]otal - List out the entire list of previous expressions and results\n";
+}
+
+enum LoopResponse {
+    kExit=-1,
+    kContinue=0,
+    kExpression
+};
+
+int handle_non_expression(const std::string& input, const Journal& journal) {
+    if (input.empty()) return LoopResponse::kContinue;
+
+    int response = LoopResponse::kContinue;
+    switch (input[0]) {
+        case 'e':
+            response = LoopResponse::kExit;
+            break;
+        case 'l':
+            std::cout << journal.get_previous_eq();
+            response = LoopResponse::kContinue;
+            break;
+        case 't':
+            std::cout << journal.get_journal_total();
+            response = LoopResponse::kContinue;
+            break;
+        default:
+            response = LoopResponse::kExpression;
+    }
+
+    return response;
 }
 
 int main(int argc, char* argv[]) {
@@ -33,15 +52,13 @@ int main(int argc, char* argv[]) {
         std::cout << "Enter postfix expression: ";
         std::getline(std::cin, input);
         input = trim(input);
-        if (input[0] == 'e') break;
-        if (input[0] == 'l') {
-            std::cout << journal.get_previous_eq();
+
+        int response = handle_non_expression(input, journal);
+        if (response == LoopResponse::kExit) {
+            break;
+        } else if (response == LoopResponse::kContinue) {
             continue;
         } 
-        if (input[0] == 't') {
-            std::cout << journal.get_journal_total();
-            continue;
-        }
 
         std::cout << "Expression: " << input << "\n";
         tokens = Tokenizer::tokenize(input);

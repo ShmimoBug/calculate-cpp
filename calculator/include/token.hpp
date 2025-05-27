@@ -1,5 +1,5 @@
-#ifndef TOKEN
-#define TOKEN
+#ifndef TOKEN_H
+#define TOKEN_H
 
 enum TokenType {
     kOperator=0,
@@ -15,4 +15,4 @@ struct Token {
     TokenType type;
 };
 
-#endif // TOKEN
+#endif // TOKEN_H

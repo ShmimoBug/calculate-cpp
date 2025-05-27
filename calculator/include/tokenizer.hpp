@@ -1,5 +1,5 @@
-#ifndef TOKENIZER
-#define TOKENIZER
+#ifndef TOKENIZER_H
+#define TOKENIZER_H
 
 #include <vector>
 #include <string>
@@ -10,4 +10,4 @@ namespace Tokenizer {
     std::vector<Token> tokenize(std::string &input);
 };
 
-#endif // Tokenizer
+#endif // TOKENIZER_H

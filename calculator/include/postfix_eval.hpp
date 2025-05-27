@@ -1,5 +1,5 @@
-#ifndef POSTFIX_EVAL
-#define POSTFIX_EVAL
+#ifndef POSTFIX_EVAL_H
+#define POSTFIX_EVAL_H
 
 #include <vector>
 
@@ -9,4 +9,4 @@ namespace PostFix {
     double evaluate(const std::vector<Token>& tokens);
 };
 
-#endif // POSTFIX_EVAL
+#endif // POSTFIX_EVAL_H
