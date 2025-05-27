@@ -8,6 +8,7 @@ add_executable(${PROJECT_NAME}
     calculator/src/main.cpp
     calculator/src/tokenizer.cpp
     calculator/src/postfix_eval.cpp
+    calculator/src/journal.cpp
 )
 
 target_include_directories(${PROJECT_NAME} PUBLIC calculator/include)
