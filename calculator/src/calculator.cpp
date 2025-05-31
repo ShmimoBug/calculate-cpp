@@ -20,13 +20,24 @@ static double result = -1;
 static std::vector<Token> tokens;
 static Journal journal;
 
+#define NUM_OPTIONS 5
+static const char *OPTIONS[NUM_OPTIONS] = {
+    "E[x]pression - Enter a postfix (Reverse Polish) expression to be evaluated.",
+    "[l]ast - Print out the previous expression and result.",
+    "[a]ll - Print out the entire list of previous expressions and results.",
+    "[o]ptions - List out these options.",
+    "[e]xit - Exit the program."
+};
+
+static void print_option(const char *option) {
+    std::cout << "\t" << option << "\n";
+}
+
 static void print_options() {
     std::cout << "=== C++ Calculator ===\n";
-    std::cout << "\tE[x]pression - Enter a postfix (Reverse Polish) expression to be evaluated.\n";
-    std::cout << "\t[l]ast - Print out the previous expression and result.\n";
-    std::cout << "\t[a]ll - Print out the entire list of previous expressions and results.\n";
-    std::cout << "\t[o]ptions - List out these optins.\n";
-    std::cout << "\t[e]xit - Exit the program.\n";
+    for (size_t i = 0; i < NUM_OPTIONS; i++) {
+        print_option(OPTIONS[i]);
+    }
 }
 
 static void do_postfix() {
