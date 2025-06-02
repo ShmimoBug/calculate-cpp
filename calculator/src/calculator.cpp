@@ -9,7 +9,8 @@
 #include "tokenizer.hpp"
 #include "token.hpp"
 
-#define EXPR 'x'
+#define POST 'p'
+#define INFI 'i'
 #define LAST 'l'
 #define ALL  'a'
 #define OPTS 'o'
@@ -20,9 +21,10 @@ static double result = -1;
 static std::vector<Token> tokens;
 static Journal journal;
 
-#define NUM_OPTIONS 5
+#define NUM_OPTIONS 6
 static const char *OPTIONS[NUM_OPTIONS] = {
-    "E[x]pression - Enter a postfix (Reverse Polish) expression to be evaluated.",
+    "[p]ostfix - Enter a postfix (Reverse Polish) expression to be evaluated.",
+    "[i]nfix - Enter an infix expression to be evaluated.",
     "[l]ast - Print out the previous expression and result.",
     "[a]ll - Print out the entire list of previous expressions and results.",
     "[o]ptions - List out these options.",
@@ -41,14 +43,24 @@ static void print_options() {
 }
 
 static void do_postfix() {
-    std::cout << "Enter Expression\n";
+    std::cout << "Enter Postfix Expression\n";
     std::cout << "> ";
     std::getline(std::cin, input);
-    tokens = Tokenizer::tokenize(input);
+    tokens = Tokenizer::postfix_tokenize(input);
     result = PostFix::evaluate(tokens);
     std::cout << "Result: " << result << "\n";
     journal.append_eq(tokens, result);
 } 
+
+static void do_infix() {
+    std::cout << "Enter Infix Expression\n";
+    std::cout << "> ";
+    std::getline(std::cin, input);
+    tokens = Tokenizer::infix_tokenize(input);
+    result = PostFix::evaluate(tokens);
+    std::cout << "Result: " << result << "\n";
+    journal.append_eq(tokens, result);
+}
 
 static void do_print_last() {
     std::cout << "Previous Expression:\n";
@@ -70,8 +82,11 @@ int Calc::main_loop() {
         if (input.empty()) continue;
 
         switch (input[0]) {
-            case EXPR:
+            case POST:
                 do_postfix();
+                break;
+            case INFI:
+                do_infix();
                 break;
             case LAST:
                 do_print_last();

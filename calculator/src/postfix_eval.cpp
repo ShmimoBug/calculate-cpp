@@ -1,3 +1,4 @@
+#include <cmath>
 #include <iostream>
 #include <stack>
 
@@ -35,6 +36,8 @@ double PostFix::evaluate(const std::vector<Token>& tokens) {
                 break;
             case '/':
                 result = val1 / val2;
+            case '^':
+                result = pow(val1, val2);
                 break;
             default:
                 std::cerr << "ERROR: Invalid Operator\n";
