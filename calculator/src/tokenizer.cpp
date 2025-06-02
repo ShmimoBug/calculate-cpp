@@ -6,6 +6,23 @@
 #include "token.hpp"
 #include "tokenizer.hpp"
 
+/*
+ * This files where most of the magic happens.
+ *
+ * Each tokenizing expression has a corresponding string tokenizer.
+ * The string tokenizer returns the string split into a list which should
+ * be split based on their respective criteria
+ *  Postfix: split on white space
+ *  Infix: split on operators
+ * 
+ * The functions that are called in the main loop and return a list
+ * of actual tokenize, then order the tokens properly. Despite one 
+ * being for infix notation and another being for postfix,
+ * both functions return a list of tokens in postfix notation, since in the 
+ * case of infix notation, it's much easier to convert it postfix and then
+ * evaluate, than try to follow all of math's rules strictly in infix notation.
+ * */
+
 static bool char_is_operator(char ch) {
     switch (ch) {
         case '+':
@@ -24,6 +41,9 @@ static std::vector<std::string> infix_tokenize_str(std::string& input) {
     size_t pos = 0;
     std::string token;
 
+    /* function only splits on operators, the function that converts the string to a double, in the
+    * case of a value token, should be able to properly ignore whitespace... keyword 'should'
+    */
     size_t i = 0;
     for (;i < input.size(); i++) {
         if (char_is_operator(input[i])) {
@@ -45,6 +65,12 @@ static std::vector<std::string> postfix_tokenize_str(std::string& input) {
     size_t pos = 0;
     std::string token;
 
+    /* This is my attempt at more robust handling of user input, wanted to be 
+     * generous and allow them to have a few errors, that's why before processing the string
+     * we eliminate any tabs, although there shouldn't be any there in the first place. I could 
+     * omit this and just return whatever error the user may have caused and not attempt to stupid-proof
+     * user input, because that is practically impossible
+     * */
     input = str_util::replace_all_of(input, '\t', ' ');
     while ((pos = input.find(" ")) != std::string::npos) {
         token = str_util::trim(input.substr(0, pos));
@@ -82,7 +108,11 @@ std::vector<Token> Tokenizer::postfix_tokenize(std::string& input) {
     return tokens;
 }
 
-int precedence(const Token &token) {
+/*
+ * Returns the precedence of a mathematical operator, following everyone's
+ * favorite: PEMDAS
+ * */
+static int precedence(const Token &token) {
     switch (token.op) {
         case '^':
             return 3;

@@ -17,6 +17,11 @@ double PostFix::evaluate(const std::vector<Token>& tokens) {
             continue;
         } 
 
+        /*
+         * In Postfix notation, whenever an operator is reached, there should be no more
+         * than two values on the stack, if there is, the user has not followed proper
+         * notation, and should be alerted of such.
+         * */
         if (eq_stack.size() < 2) {
             std::cerr << "ERROR: too many operators\n";
             return -1;
@@ -47,6 +52,9 @@ double PostFix::evaluate(const std::vector<Token>& tokens) {
         eq_stack.push(result);
     }
 
+    /* if the stack has more then the final result, it means there weren't enough operators for all the operanrds
+     * rather than return whatever is on the top of the stack, alert the user of their error.
+    */ 
     if (eq_stack.size() > 1) {
         std::cerr << "ERROR: Too Many Operands\n";
         return -1;

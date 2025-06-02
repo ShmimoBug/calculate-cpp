@@ -6,6 +6,12 @@
 
 #include "token.hpp"
 
+/*
+ * Journal
+ *
+ * Description: Stores the a list of all user inputs that can be requested and 
+ * presented back to the user at anytime. great for debuggin!
+ * */
 class Journal {
 public:
     void append_eq(const std::vector<Token>& tokens, double result);
