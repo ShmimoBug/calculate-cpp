@@ -18,7 +18,7 @@ namespace Tokenizer {
     /*
      * Given a user inputted string, turn the string into tokens representing either 
      * a number value or a mathematical operator, this function transforms 
-     * ther user input, which is assumed to be in infix notation, to a postfix list
+     * the user input, which is assumed to be in infix notation, to a postfix list
      * of tokens. 
      * */
     std::vector<Token> infix_tokenize(std::string &input);

@@ -12,15 +12,16 @@
  * Each tokenizing expression has a corresponding string tokenizer.
  * The string tokenizer returns the string split into a list which should
  * be split based on their respective criteria
- *  Postfix: split on white space
+ *  Postfix: split on whitespace
  *  Infix: split on operators
  * 
  * The functions that are called in the main loop and return a list
- * of actual tokenize, then order the tokens properly. Despite one 
+ * of actual tokens, tokenize the strings and order the tokens properly. Despite one 
  * being for infix notation and another being for postfix,
  * both functions return a list of tokens in postfix notation, since in the 
  * case of infix notation, it's much easier to convert it postfix and then
  * evaluate, than try to follow all of math's rules strictly in infix notation.
+ * The infix refers to the notation used by the user when inputting their expression.
  * */
 
 static bool char_is_operator(char ch) {
