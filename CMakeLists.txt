@@ -11,6 +11,9 @@ add_executable(${PROJECT_NAME}
     calculator/src/journal.cpp
     calculator/src/str_util.cpp
     calculator/src/calculator.cpp
+    calculator/src/gui_calc.cpp
+    calculator/src/gui/buttons.cpp
 )
 
 target_include_directories(${PROJECT_NAME} PUBLIC calculator/include)
+target_link_libraries(${PROJECT_NAME} PRIVATE raylib)

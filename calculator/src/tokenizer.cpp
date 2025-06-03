@@ -151,6 +151,10 @@ std::vector<Token> Tokenizer::infix_tokenize(std::string &input) {
                 tokens.push_back(tok_stack.top());
                 tok_stack.pop();
             }
+            if (tok_stack.empty()) {
+                std::cerr << "ERROR: Invalid Expression\n";
+                return {}; // too many closing parentheses, improper expression
+            }
             tok_stack.pop();
         } else if (char_is_operator(st[0], false)) {
             token.op = st[0];
