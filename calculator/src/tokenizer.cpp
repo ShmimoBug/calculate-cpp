@@ -24,7 +24,7 @@
  * The infix refers to the notation used by the user when inputting their expression.
  * */
 
-static bool char_is_operator(char ch) {
+static bool char_is_operator(char ch, bool include_paren=true) {
     switch (ch) {
         case '+':
         case '-':
@@ -32,6 +32,9 @@ static bool char_is_operator(char ch) {
         case '/':
         case '^':
             return true;
+        case '(':
+        case ')':
+            return include_paren;
     };
 
     return false;
@@ -125,7 +128,7 @@ static int precedence(const Token &token) {
             return 1;
     }
 
-    return -1; // shouldn't get here!
+    return -1; // token is a parenthesis '()'
 }
 
 std::vector<Token> Tokenizer::infix_tokenize(std::string &input) {
@@ -139,17 +142,26 @@ std::vector<Token> Tokenizer::infix_tokenize(std::string &input) {
             token.val = std::stod(st);
             token.type = TokenType::kVal;
             tokens.push_back(token);
-        } else {
-            if (char_is_operator(st[0])) {
-                token.op = st[0];
-                token.type = TokenType::kOperator;
-                
-                while (!tok_stack.empty() && precedence(token) <= precedence(tok_stack.top())) {
-                    tokens.push_back(tok_stack.top());
-                    tok_stack.pop();
-                }
-                tok_stack.push(token);
+        } else if (st[0] == '(') {
+            token.op = '(';
+            token.type = TokenType::kOperator;
+            tok_stack.push(token);
+        } else if (st[0] == ')') {
+            while (!tok_stack.empty() && (tok_stack.top().op != '(')) {
+                tokens.push_back(tok_stack.top());
+                tok_stack.pop();
             }
+            tok_stack.pop();
+        } else if (char_is_operator(st[0], false)) {
+            token.op = st[0];
+            token.type = TokenType::kOperator;
+
+            while (!tok_stack.empty() && precedence(token) <= precedence(tok_stack.top())) {
+                tokens.push_back(tok_stack.top());
+                tok_stack.pop();
+            }
+
+            tok_stack.push(token);
         }
     }
 
