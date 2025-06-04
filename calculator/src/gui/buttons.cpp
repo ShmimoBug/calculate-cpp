@@ -91,19 +91,52 @@ void Buttons::init(int win_width, int win_height) {
     }
 }
 
-void Buttons::update(char *input, std::vector<Token>& tokens, double &result, Journal &journal) {
+static void clear_input(char *input, size_t &in_len) {
+    memset(input, 0, 256);
+    evaluated = false;
+    in_len = 0;
+}
+
+void Buttons::update(char *input, size_t &in_len, std::vector<Token>& tokens, double &result, Journal &journal) {
+    int key = GetCharPressed();
+    while (key > 0) {
+        if (evaluated) {
+            clear_input(input, in_len);
+        }
+
+        if ((key > 32) && (key <= 125) && (in_len < 256)) {
+            input[in_len++] = key;
+        }
+
+        key = GetCharPressed();
+    }
+
+    if (IsKeyPressed(KEY_ENTER)) {
+        if (strcmp(input, "list")==0) {
+            std::cout << journal.get_journal_total();
+            clear_input(input, in_len);
+        } else {
+            std::string input_str = input;
+            tokens = Tokenizer::infix_tokenize(input_str);
+            result = PostFix::evaluate(tokens);
+            sprintf(input, "%lf", result);
+            journal.append_eq(tokens, result);
+            evaluated = true;
+        }
+
+    }
+
     for (Button &button : buttons) {
         if (button.IsPressed()) {
-            if (button.text != "=" && button.text != "AC") {
+            if (button.text != "=" && button.text != "AC" && in_len < 256) {
                 if (evaluated) {
-                    input[0] = '\0';
-                    evaluated = false;
+                    clear_input(input, in_len);
                 }
                 strcat(input, button.text.c_str());
+                in_len += button.text.length();
             } else {
                 if (button.text == "AC") {
-                    input[0] = '\0';
-                    evaluated = false;
+                    clear_input(input, in_len);
                 } else {
                     std::string input_str = input;
                     tokens = Tokenizer::infix_tokenize(input_str);

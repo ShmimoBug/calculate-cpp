@@ -1,6 +1,6 @@
 #include "gui_calc.hpp"
 
-#include <functional>
+#include <cstring>
 #include <iostream>
 #include <raylib.h>
 #include <string>
@@ -21,6 +21,7 @@ int GuiCalc::main_loop() {
     SetTargetFPS(60);
 
     char input[256] = "\0";
+    size_t in_len = 0;
     double result = -1;
     std::vector<Token> tokens;
     Journal journal;
@@ -30,7 +31,7 @@ int GuiCalc::main_loop() {
     while (!WindowShouldClose()) {
         BeginDrawing();
             ClearBackground(RAYWHITE);
-            Buttons::update(input, tokens, result, journal);
+            Buttons::update(input, in_len, tokens, result, journal);
             Buttons::render(input);
         EndDrawing();
     }
