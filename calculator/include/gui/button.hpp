@@ -6,8 +6,11 @@
 
 class Button {
 public:
-    Button();
-    Button(const Rectangle& bounds, const Color& reg_color, const Color& hover_color, const Color& pressed_color, const std::string& text);
+    Button(const Rectangle& bounds={0}, 
+            const Color& reg_color=LIGHTGRAY, 
+            const Color& hover_color=GRAY, 
+            const Color& pressed_color=DARKGRAY, 
+            const std::string& text="");
 
     void set_position(float x, float y);
     void set_size(float width, float height);

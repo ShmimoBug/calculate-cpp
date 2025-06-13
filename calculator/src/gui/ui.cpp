@@ -11,11 +11,12 @@
 #include "tokenizer.hpp"
 #include "token.hpp"
 
+#define INPUT_MAX 128
+
 struct Layout {
     int row, column;
     std::string label;
 };
-
 
 #define REG_COLOR LIGHTGRAY
 #define HOVER_COLOR GRAY
@@ -60,7 +61,7 @@ void UI::update(std::string& input, std::vector<Token>& tokens, double &result, 
             evaluated = false;
         }
 
-        if ((key > 32) && (key <= 125) && (input.length() < 256)) {
+        if ((key > 32) && (key <= 125) && (input.length() < INPUT_MAX)) {
             input += static_cast<char>(key);
         }
 
@@ -84,9 +85,10 @@ void UI::update(std::string& input, std::vector<Token>& tokens, double &result, 
 
     for (Button &button : buttons) {
         if (button.is_pressed()) {
-            if (button.get_text() != "=" && button.get_text() != "AC" && input.length() < 256) {
+            if (button.get_text() != "=" && button.get_text() != "AC" && input.length() < INPUT_MAX) {
                 if (evaluated) {
                     input.clear();
+                    evaluated = false;
                 }
                 input += button.get_text();
             } else {
