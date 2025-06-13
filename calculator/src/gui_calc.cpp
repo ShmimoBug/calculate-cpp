@@ -6,7 +6,7 @@
 #include <string>
 #include <vector>
 
-#include "gui/buttons.hpp"
+#include "gui/ui.hpp"
 #include "journal.hpp"
 #include "postfix_eval.hpp"
 #include "tokenizer.hpp"
@@ -18,21 +18,22 @@
 
 int GuiCalc::main_loop() {
     InitWindow(WIN_WIDTH, WIN_HEIGHT, TITLE);
+    ClearWindowState(FLAG_WINDOW_RESIZABLE);
+    SetWindowMaxSize(WIN_WIDTH, WIN_WIDTH);
     SetTargetFPS(60);
 
-    char input[256] = "\0";
-    size_t in_len = 0;
+    std::string input = "";
     double result = -1;
     std::vector<Token> tokens;
     Journal journal;
 
-    Buttons::init(WIN_WIDTH, WIN_HEIGHT);
+    UI::init(WIN_WIDTH, WIN_HEIGHT);
 
     while (!WindowShouldClose()) {
         BeginDrawing();
             ClearBackground(RAYWHITE);
-            Buttons::update(input, in_len, tokens, result, journal);
-            Buttons::render(input);
+            UI::update(input, tokens, result, journal);
+            UI::render(input);
         EndDrawing();
     }
 

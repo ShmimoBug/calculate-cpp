@@ -12,7 +12,8 @@ add_executable(${PROJECT_NAME}
     calculator/src/str_util.cpp
     calculator/src/calculator.cpp
     calculator/src/gui_calc.cpp
-    calculator/src/gui/buttons.cpp
+    calculator/src/gui/ui.cpp
+    calculator/src/gui/button.cpp
 )
 
 target_include_directories(${PROJECT_NAME} PUBLIC calculator/include)
