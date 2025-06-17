@@ -20,9 +20,15 @@ double PostFix::evaluate(const std::vector<Token>& tokens) {
         /*
          * In Postfix notation, whenever an operator is reached, there should be no less
          * than two values on the stack, if there is, the user has not followed proper
-         * notation, and should be alerted of such.
+         * notation, and should be alerted of such. The only exception is for the '-'
+         * operator, which implies the single operand should become negative.
          * */
         if (eq_stack.size() < 2) {
+            if (t.op == '-' && !eq_stack.empty()) {
+                eq_stack.top() *= -1.0;
+                continue;
+            }
+
             std::cerr << "ERROR: too many operators\n";
             return -1;
         }
@@ -41,6 +47,7 @@ double PostFix::evaluate(const std::vector<Token>& tokens) {
                 break;
             case '/':
                 result = val1 / val2;
+                break;
             case '^':
                 result = pow(val1, val2);
                 break;
